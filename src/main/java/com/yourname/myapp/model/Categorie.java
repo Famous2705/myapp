@@ -8,13 +8,16 @@ import lombok.Setter;
 @Table(name = "categories")
 public class Categorie {
 
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(nullable = false, unique = true)
     private String nom;
 
+    @Getter
     @OneToMany(mappedBy = "categorie")
     private List<Produit> produits;
 
