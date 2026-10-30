@@ -1,5 +1,6 @@
 package com.yourname.myapp.dto;
 
+import com.yourname.myapp.model.Order;
 import com.yourname.myapp.model.OrderStatus;
 
 import java.math.BigDecimal;

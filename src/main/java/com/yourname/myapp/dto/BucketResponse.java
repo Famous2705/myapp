@@ -3,6 +3,7 @@ package com.yourname.myapp.dto;
 import com.yourname.myapp.model.Bucket;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record BucketResponse(
         Long id,

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,12 +20,12 @@ public class Bucket {
     @Setter
     @Getter
     @Column(nullable = false, unique = true)
-    private String user_id;
+    private Long user_id;
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
-    private List<BucketLine> bucketLineList;
+    @OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BucketLine> bucketLineList = new ArrayList<>();
 
     // getters, setters, constructeurs
 }
