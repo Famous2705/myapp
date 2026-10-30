@@ -3,8 +3,11 @@ package com.yourname.myapp.service;
 import com.yourname.myapp.dto.ProductRequest;
 import com.yourname.myapp.dto.ProductResponse;
 import com.yourname.myapp.exception.ResourceNotFoundException;
+import com.yourname.myapp.model.Categorie;
 import com.yourname.myapp.model.Produit;
+import com.yourname.myapp.repository.CategoryRepository;
 import com.yourname.myapp.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,25 +18,31 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
 
+import javax.naming.InsufficientResourcesException;
+
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ProductResponse create(ProductRequest request) {
-        return new ProductResponse(
-                request.Id(),
-                request.nom(),
-                request.description(),
-                request.price(),
-                request.stock(),
-                request.CategoryId(),
-                request.CategoryNom()
-        );
+        Categorie categorie = categoryRepository.findById(request.CategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+        Produit produit = new Produit();
+        produit.setNom(request.nom());
+        produit.setDescription(request.description());
+        produit.setPrix(request.price());
+        produit.setStock(request.stock());
+        produit.setCategorie(categorie);
+
+        return ProductResponse.from(productRepository.save(produit));
     }
 
     public ProductResponse getById(Long id){
@@ -70,5 +79,58 @@ public class ProductService {
 
         return productRepository.findAll(spec, pageable)
                 .map(ProductResponse::from);
+    }
+
+    @Transactional
+    public ProductResponse update(Long id, ProductRequest request) {
+        Produit produit = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        Categorie categorie = categoryRepository.findById(request.CategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+        produit.setNom(request.nom());
+        produit.setDescription(request.description());
+        produit.setPrix(request.price());
+        produit.setStock(request.stock());
+        produit.setCategorie(categorie);
+
+        return ProductResponse.from(productRepository.save(produit));
+    }
+
+    public void delete(Long id) {
+        Produit produit = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        productRepository.delete(produit);
+    }
+
+    @Transactional
+    public ProductResponse adjustStock(Long id, int newStock) {
+        Produit produit = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        produit.setStock(newStock);
+
+        return ProductResponse.from(productRepository.save(produit));
+    }
+
+    @Transactional
+    void decreaseStock(Long productId, int quantity) throws InsufficientResourcesException {
+        Produit produit = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        if (produit.getStock() < quantity) {
+            throw new InsufficientResourcesException("Not enough stock for product " + productId);
+        }
+        produit.setStock(produit.getStock() - quantity);
+    }
+
+    @Transactional
+    void restoreStock(Long productId, int quantity) {
+        Produit produit = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        produit.setStock(produit.getStock() + quantity);
     }
 }
