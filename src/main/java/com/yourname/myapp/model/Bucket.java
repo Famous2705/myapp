@@ -10,13 +10,19 @@ import java.util.List;
 @Table(name = "bucket")
 public class Bucket {
 
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @Getter
     @Column(nullable = false, unique = true)
     private String user_id;
 
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
     private List<BucketLine> bucketLineList;
 
