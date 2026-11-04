@@ -20,9 +20,8 @@ public class Order {
 
     @Setter
     @Getter
-    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User utilisateur;
+    private Long utilisateur;
 
     @Setter
     @Getter

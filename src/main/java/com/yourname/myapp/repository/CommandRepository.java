@@ -5,10 +5,11 @@ import com.yourname.myapp.model.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface CommandRepository extends JpaRepository<Order, Long> {
+public interface CommandRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
     // Historique d'un utilisateur, la plus récente en premier
     Page<Order> findByUserIdOrderByDateOrderDesc(Long userId, Pageable pageable);
