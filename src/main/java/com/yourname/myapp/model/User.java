@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -18,21 +19,16 @@ public class User {
 
     @Setter
     @Getter
-    @Column(nullable = false, length = 100)
-    private String name;
-
-    @Setter
-    @Getter
     @Column(nullable = false, unique = true)
     private String email;
 
     @Setter
     @Getter
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(nullable = false, unique = true)
+    private String passWord;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @Setter
+    @Getter
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 }
