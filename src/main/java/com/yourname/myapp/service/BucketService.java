@@ -30,14 +30,14 @@ public class BucketService {
         this.userRepository = userRepository1;
     }
 
-    BucketResponse getBucket(Long userId) {
+    public BucketResponse getBucket(Long userId) {
         return bucketRepository.findByUtilisateurId(userId)
                 .map(BucketResponse::from)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket not found"));
     }
 
     @Transactional
-    BucketResponse addProduct(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
+    public BucketResponse addProduct(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
@@ -80,7 +80,7 @@ public class BucketService {
     }
 
     @Transactional
-    BucketResponse updateQuantity(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
+    public BucketResponse updateQuantity(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
@@ -98,7 +98,7 @@ public class BucketService {
     }
 
     @Transactional
-    BucketResponse removeProduct(Long userId, Long productId) {
+    public BucketResponse removeProduct(Long userId, Long productId) {
         Bucket bucket = getOrCreateBucket(userId);
         boolean removed = bucket.getBucketLineList()
                 .removeIf(l -> l.getProduit().getId().equals(productId));
@@ -109,7 +109,7 @@ public class BucketService {
     }
 
     @Transactional
-    void clear(Long userId) {
+    public void clear(Long userId) {
         bucketRepository.findByUtilisateurId(userId)
                 .ifPresent(bucket -> bucket.getBucketLineList().clear());
     }
