@@ -1,4 +1,4 @@
-# MyApp: E-commerce Backend with Product Recommendations
+# MyApp: E-commerce App with Product Recommendations
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1-6DB33F)
