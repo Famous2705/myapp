@@ -5,6 +5,7 @@ import com.yourname.myapp.exception.ResourceNotFoundException;
 import com.yourname.myapp.model.*;
 import com.yourname.myapp.repository.BucketRepository;
 import com.yourname.myapp.repository.CommandRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,6 +35,7 @@ public class OrderService {
         this.productService = productService;
     }
 
+    @Transactional
     public OrderResponse placeOrder(Long userId) throws InsufficientResourcesException {
         Bucket bucket = bucketRepository.findByUtilisateurId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bucket not found"));
@@ -96,6 +98,7 @@ public class OrderService {
                 .map(OrderResponse::from);
     }
 
+    @Transactional
     public OrderResponse cancelOrder(Long orderId, Long userId) {
         Order order = commandRepository.findByIdAndUserId(userId, orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
@@ -119,6 +122,8 @@ public class OrderService {
                 .map(OrderResponse::from);
     }
     // admin
+
+    @Transactional
     public OrderResponse changeStatus(Long orderId, OrderStatus newStatus) {
         Order order = commandRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));

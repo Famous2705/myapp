@@ -12,6 +12,4 @@ public class BucketLineService {
     public BucketLineService(BucketLineRepository bucketLineRepository){
         this.bucketLineRepository = bucketLineRepository;
     }
-
-
 }
