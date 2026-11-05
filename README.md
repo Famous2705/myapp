@@ -131,5 +131,5 @@ Base path: `/api/v1`
 
 ## Author
 
-**Famous**: Computer Science student at Saarland University.
+**Paul-christian**: Computer Science student at Saarland University.
 GitHub: [@Famous2705](https://github.com/Famous2705)
