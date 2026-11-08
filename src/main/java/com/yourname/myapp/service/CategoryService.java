@@ -25,7 +25,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse create(CategoryRequest request) {
-        boolean exist = categoryRepository.existsByName(request.nom());
+        boolean exist = categoryRepository.existsByNom(request.nom());
 
         if(!exist){
             throw new ResourceNotFoundException("Category not found");

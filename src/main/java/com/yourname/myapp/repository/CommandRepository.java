@@ -11,12 +11,9 @@ import java.util.Optional;
 
 public interface CommandRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    // Historique d'un utilisateur, la plus récente en premier
-    Page<Order> findByUserIdOrderByDateOrderDesc(Long userId, Pageable pageable);
-
     // Sécurité : une commande n'est retrouvée que si elle appartient bien à cet utilisateur
-    Optional<Order> findByIdAndUserId(Long id, Long userId);
+    Optional<Order> findByIdAndUtilisateurId(Long id, Long utilisateurId);
 
     // Vue admin
-    Page<Order> findByStatus(OrderStatus status, Pageable pageable);
+    Page<Order> findByStatut(OrderStatus statut, Pageable pageable);
 }

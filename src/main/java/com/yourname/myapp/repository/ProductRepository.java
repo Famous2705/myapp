@@ -15,20 +15,10 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Produit, Long>, JpaSpecificationExecutor<Produit> {
-    Optional<Produit> findById(Long id) ;
+public interface ProductRepository extends JpaRepository<Produit, Long>,
+        JpaSpecificationExecutor<Produit> {
 
-    boolean existsById (Long id) ;
-
-    Page<Produit> findByCategoryId (Long CategoryId, Pageable pageable);
-
-    Page<Produit> findByNomContainingIgnoreCase(String motCle, Pageable pageable);
-
-    Page<Produit> findByPriceBetween(BigDecimal priceMin, BigDecimal priceMax, Pageable pageable);
-
-    Page<Produit> findByStockGreaterThan(Integer stock, Pageable pageable);
-
-    boolean existsByCategoryId(Long categoryId);
+    boolean existsByCategorieId(Long categorieId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM Produit p WHERE p.id = :id")

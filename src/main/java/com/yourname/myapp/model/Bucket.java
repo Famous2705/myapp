@@ -17,10 +17,11 @@ public class Bucket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
+    @OneToOne
     @Getter
-    @Column(nullable = false, unique = true)
-    private Long user_id;
+    @Setter
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User utilisateur;
 
     @Setter
     @Getter

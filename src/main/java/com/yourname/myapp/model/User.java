@@ -24,11 +24,11 @@ public class User {
 
     @Setter
     @Getter
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String passWord;
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "utilisateur")
     private List<Order> orders;
 }

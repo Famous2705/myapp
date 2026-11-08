@@ -1,6 +1,7 @@
 package com.yourname.myapp.service;
 
 import com.yourname.myapp.dto.BucketResponse;
+import com.yourname.myapp.exception.InsufficientStockException;
 import com.yourname.myapp.exception.ResourceNotFoundException;
 import com.yourname.myapp.model.Bucket;
 import com.yourname.myapp.model.BucketLine;
@@ -11,8 +12,6 @@ import com.yourname.myapp.repository.ProductRepository;
 import com.yourname.myapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import javax.naming.InsufficientResourcesException;
 
 @Service
 public class BucketService {
@@ -37,7 +36,7 @@ public class BucketService {
     }
 
     @Transactional
-    public BucketResponse addProduct(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
+    public BucketResponse addProduct(Long userId, Long productId, int quantity) throws InsufficientStockException {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
@@ -54,7 +53,7 @@ public class BucketService {
 
         int newQuantity = (line == null ? 0 : line.getQuantite()) + quantity;
         if (newQuantity > produit.getStock()) {
-            throw new InsufficientResourcesException("Not enough stock for product " + productId);
+            throw new InsufficientStockException("Not enough stock for product " + productId);
         }
 
         if (line == null) {
@@ -74,13 +73,13 @@ public class BucketService {
                     User user = userRepository.findById(userId)
                             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
                     Bucket bucket = new Bucket();
-                    bucket.setUser_id(userId);
+                    bucket.setUtilisateur(user);
                     return bucketRepository.save(bucket);
                 });
     }
 
     @Transactional
-    public BucketResponse updateQuantity(Long userId, Long productId, int quantity) throws InsufficientResourcesException {
+    public BucketResponse updateQuantity(Long userId, Long productId, int quantity) throws InsufficientStockException {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
@@ -91,7 +90,7 @@ public class BucketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not in bucket"));
 
         if (quantity > line.getProduit().getStock()) {
-            throw new InsufficientResourcesException("Not enough stock for product " + productId);
+            throw new InsufficientStockException("Not enough stock for product " + productId);
         }
         line.setQuantite(quantity);
         return BucketResponse.from(bucket);

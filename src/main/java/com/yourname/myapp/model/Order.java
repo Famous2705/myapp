@@ -18,10 +18,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
     @Setter
     @Getter
     @JoinColumn(name = "user_id", nullable = false)
-    private Long utilisateur;
+    private User utilisateur;
 
     @Setter
     @Getter
@@ -35,7 +36,7 @@ public class Order {
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> lines;
 
     @Setter

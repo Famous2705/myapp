@@ -45,7 +45,7 @@ public class OrderService {
         }
 
         Order order = new Order();
-        order.setUtilisateur(bucket.getUser_id());
+        order.setUtilisateur(bucket.getUtilisateur());
         order.setStatut(OrderStatus.WAITING);
         order.setDateCommande(LocalDateTime.now());
 
@@ -78,7 +78,7 @@ public class OrderService {
     }
 
     public OrderResponse getOrder(Long orderId, Long userId) {
-        return commandRepository.findByIdAndUserId(userId, orderId)
+        return commandRepository.findByIdAndUtilisateurId(userId, orderId)
                 .map(OrderResponse :: from)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
@@ -100,7 +100,7 @@ public class OrderService {
 
     @Transactional
     public OrderResponse cancelOrder(Long orderId, Long userId) {
-        Order order = commandRepository.findByIdAndUserId(userId, orderId)
+        Order order = commandRepository.findByIdAndUtilisateurId(userId, orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
         commandRepository.delete(order);

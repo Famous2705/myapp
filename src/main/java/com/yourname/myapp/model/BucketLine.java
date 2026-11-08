@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+@Entity
 @Table(name = "bucket_line")
 public class BucketLine {
 

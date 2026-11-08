@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface BucketLineRepository extends JpaRepository<BucketLine, Long> {
     List<BucketLine> findByBucketId(Long bucketId);
 
-    Optional<BucketLine> findByBucketIdAndProductId(Long bucketId, Long productId);
+    Optional<BucketLine> findByBucketIdAndProduitId(Long bucketId, Long produitId);
 }
