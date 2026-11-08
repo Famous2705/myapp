@@ -119,7 +119,7 @@ Base path: `/api/v1`
 - [x] Domain model and repositories
 - [x] Services (catalog, users, cart, orders)
 - [x] Catalog and user REST endpoints
-- [ ] Cart and order REST endpoints
+- [x] Cart and order REST endpoints
 - [ ] Complete exception handling (insufficient stock, forbidden operations)
 - [ ] Unit and integration tests
 - [ ] Authentication and authorization (Spring Security, JWT, user/admin roles)
